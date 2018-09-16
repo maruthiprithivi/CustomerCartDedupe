@@ -1,0 +1,24 @@
+
+mongo:
+    # Point this to your MongoDB host
+    host: 172.17.0.3
+    port: 27017
+    username: admin
+    password: password
+    database: shopping
+    collection: cart
+
+kafka:
+    # Point this to your Kafka host and add in your Consumer Group info
+    host: localhost
+    bootstrapport: 9021
+    topic: ecommerce
+    groupid: mygroup
+    clientid: client-1
+
+logicone:
+    # An item is considered duplicate if the following fields are identical, the fields can be added or removed to increase the robustness of the logic
+    mapper1: productId
+    mapper2: qty
+    mapper3: unit
+    mapper4: cartId

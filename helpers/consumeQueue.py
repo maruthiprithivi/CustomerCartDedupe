@@ -1,11 +1,17 @@
 from confluent_kafka import Consumer, KafkaError
+from helpers.YamlReader import YamlReader
 
 class ConsumeQueue:
-    def readQueue(topicName):
+    def readQueue(path):
+        config = YamlReader.ymlConfig(path)
+        host = config['kafka']['host']
+        groupId = config['kafka']['groupid']
+        clientId = config['kafka']['clientid']
+        topicName = config['kafka']['topic']
         settings = {
-            'bootstrap.servers': 'localhost',
-            'group.id': 'mygroup',
-            'client.id': 'client-1',
+            'bootstrap.servers': host,
+            'group.id': groupId,
+            'client.id': clientId,
             'enable.auto.commit': True,
             'session.timeout.ms': 6000,
             'default.topic.config': {'auto.offset.reset': 'smallest'}
@@ -18,8 +24,9 @@ class ConsumeQueue:
                 if msg is None:
                     continue
                 elif not msg.error():
-                    print('Received message: {0}'.format(msg.value()))
-                    return msg.value()
+                    message = msg.value().decode("utf-8")
+                    print('Received message: {0}'.format(message))
+                    return message
                 elif msg.error().code() == KafkaError._PARTITION_EOF:
                     continue
                 else:

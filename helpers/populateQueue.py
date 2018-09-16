@@ -1,8 +1,10 @@
 from confluent_kafka import Producer
+from helpers.YamlReader import YamlReader
 
 class PopulateQueue:
-    def writeMessage(topicName, message):
-
+    def writeMessage(message, path):
+        config = YamlReader.ymlConfig(path)
+        topicName = config['kafka']['topic']
         def acked(err, msg):
             if err is not None:
                 print("Failed to deliver message: {0}: {1}"
